@@ -1,12 +1,10 @@
 import java.util.Scanner;
-public class TikTacToegame {
+public class TicTacToe {
 	// Initialized a  game board array
 	public char[] gameBoard() {
 		char[] board = new char[10];
-		for(int index = 1; index < board.length; index++) {
+		for(int index = 1; index < board.length; index++)
 			board[index] = ' '; 
-			
-		}
 		return board;
 	}
 	// Allows the player to choose between cross(x) and zero(o)
@@ -25,14 +23,12 @@ public class TikTacToegame {
 		System.out.println(board[1] + "  | " + board[2] + " | " + board[3]);
 	}
 	// This takes the user input of the player to the design board allocates a value into it
-	public char[] userInput(char[] board, char player) {
-		Scanner input = new Scanner(System.in);
+	public char[] userInput(char[] board, char player, Scanner sc) {
 		System.out.println("Enter a number from 1 to 9");
-		int user_input = input.nextInt();
+		int user_input = sc.nextInt();
 		if (user_input < 10 && user_input > 0) {
-			if (board[user_input] == ' ') {
+			if (board[user_input] == ' ')
 				board[user_input] = player;
-			}
 			else
 				System.out.println("Place is already taken");
 		}
@@ -92,6 +88,22 @@ public class TikTacToegame {
 			else if ((board[8] == board[9] && board[9] != ' ' && board[7] == ' ') || (board[1] == board[4] && board[4] != ' ' && board[7] == ' ') || (board[3] == board[5] && board[5] != ' ' && board[7] == ' '))
 				board[7] = computer;
 			// Taking corner places
+			else if (board[1] == ' ' && board[3] == ' ' && board[7] == ' ' && board[9] == ' ') {// for 1st chance of the computer so repeatablity of moves does not occur 
+				int random = (int)Math.floor(Math.random() * 10) % 4;
+				switch(random) { // random values 0, 1, 2, 3 denotes board places 1, 3, 7, 9 respectively
+					case 0:
+						board[1] = computer;
+						break;
+					case 1:
+						board[3] = computer;
+						break;
+					case 2:
+						board[7] = computer;
+						break;
+					default:
+						board[9] = computer;
+				}
+			}
 			else if (board[1] == ' ')
 				board[1] = computer;
 			else if (board[3] == ' ')
@@ -138,13 +150,13 @@ public class TikTacToegame {
 		return result;
 	}// for result  0 , 1 , 2  it represents Tie , Win , Change Turn respectively
 	// Codes defining for how long the game goes on
-	public void gamePlay(char player, char computer, char[] board, int chance, TicTacToe game) {
+	public void gamePlay(char player, char computer, char[] board, int chance, TicTacToe game, Scanner sc) {
 		int result;
 		boolean check = true;
 		while(check == true) {
 			switch(chance) {
 				case 1:
-					board = game.userInput(board, player);
+					board = game.userInput(board, player, sc);
 					switch(game.winTie(board)) {
 						case 0:
 							System.out.println("The game is a Tie");
@@ -180,24 +192,35 @@ public class TikTacToegame {
 			}
 		}
 	}
-	public static void main(String[] args) {
+	public static void playAgain(Scanner sc) {
 		char value = 'x',computer;
-		System.out.println("Welcome to tictactoe game");
-		TikTacToegame game = new TikTacToegame();
-		char[] board = game.gameBoard();
-		char player = game.playerSelection();
-		int compare = Character.compare(player, value);
-		if (compare == 0) {
-			player = 'x';
-			computer = 'o';
-		} else {
-			player = 'o';
-			computer = 'x';
+		boolean bool = true;
+		while (bool == true) {
+			System.out.println("Welcome to tictactoe game");
+			TicTacToe game = new TicTacToe();
+			char[] board = game.gameBoard();
+			char player = game.playerSelection();
+			int compare = Character.compare(player, value);
+			if (compare == 0) {
+				player = 'x';
+				computer = 'o';
+			} else {
+				player = 'o';
+				computer = 'x';
+			}
+			game.showBoard(board);
+			int chance = game.firstChance();
+			game.gamePlay(player, computer, board, chance, game, sc);
+			game.showBoard(board);
+			System.out.println("If you want to PLAY AGAIN then press 1 else press any other number");
+			int playNoPlay = sc.nextInt();
+			if (playNoPlay != 1)
+				bool = false;
 		}
-		game.showBoard(board);
-		int chance = game.firstChance();
-		game.gamePlay(player, computer, board, chance, game);
-		game.showBoard(board);
+	}
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		playAgain(sc);
 		System.out.println("******THANK YOU! VISIT AGAIN******");
 	}
 }
