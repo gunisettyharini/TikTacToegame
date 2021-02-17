@@ -1,30 +1,39 @@
+import java.util.Scanner;
 public class TikTacToegame {
-	public static void printboard() {
-		char[] gameboard = new char[10];
-		for (int i=0; i<10; i++) {
-			gameboard[i]=' ';
-			System.out.println(gameboard[i]);
+	public void gameBoard() {
+		char[] board = new char[10];
+		for(int i = 1; i < board.length; i++) {
+			board[i] = ' ';
+			System.out.println(board[i]);
 		}
 	}
-	public static void player() {
-		Scanner user = new Scanner(System.in);
-		System.out.println("Enter a choice x or o");
-		char player = user.next().charAt(0);
-		char computer = ' ';
-		if(player == 'x' || player == 'X') {
-			computer = 'o';
-		}
-		else if (player == 'O' || player == 'o') {
-			computer = 'x';
+	public void playerSelection() {
+		char player, comp;
+		Scanner input = new Scanner(System.in);
+		System.out.println("Enter x for chhosing cross and enter o for choosing circle");
+		char selection = input.next().charAt(0);
+		if (selection == 'x') {
+			player = 'x';
+			comp = 'o';
 		}
 		else {
-			System.out.println("Invalid");
+			player = 'o';
+			comp = 'x';
 		}
-		System.out.println("Player is " + player + "and Computer is " + computer);
+		System.out.println("Player is " + player + " and Computer is " + comp);
 	}
-	public static void main(String args[]) {
-		System.out.println("Welcome to tictactoe game");
-		printboard();
-		player();
- 	}
+	public void showBoard() {
+		System.out.println("  |  |  ");
+		System.out.println("--------");
+		System.out.println("  |  |  ");
+		System.out.println("--------");
+		System.out.println("  |  |  ");
+	}
+	public static void main(String[] args) {
+		System.out.println("Welcome to tiktactoe game");
+		TikTacToegame game = new TikTacToegame();
+		game.gameBoard();
+		game.playerSelection();
+		game.showBoard();
+	}
 }
